@@ -290,7 +290,7 @@ $("openBtn").addEventListener("click", () => {
   bgm.volume = .6;
   bgm.play().then(() => setM(true)).catch(() => setM(false));
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  setTimeout(reveal, reduce ? 2500 : 5000);
+  setTimeout(reveal, reduce ? 2500 : 3500);
 });
 function reveal(){ cover.classList.add("gone"); document.body.classList.remove("locked"); }
 cover.addEventListener("click", e => { if (cover.classList.contains("open") && !e.target.closest(".env")) reveal(); });
