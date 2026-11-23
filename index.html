@@ -78,7 +78,7 @@ h2{font:500 clamp(32px,6vw,44px)/1.05 "Cormorant Garamond",serif;margin:0 0 6px;
 .done{text-align:center;font-size:24px;color:var(--green);display:none}
 
 /* When */
-.when{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.when{max-width:440px;margin:0 auto}
 .cal h3,.plan h3{margin:0 0 14px;font:500 26px/1.1 "Cormorant Garamond",serif;text-align:center}
 .grid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;gap:4px 0;font-variant-numeric:tabular-nums}
 .grid7 .h{font-size:14px;color:var(--soft);padding-bottom:6px}
@@ -147,7 +147,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
         <p class="post">invite you to celebrate their wedding</p>
       </div>
     </div>
-    <p class="dateline"><span id="dWeek">Thursday</span><span id="dDate">10 December 2026</span><span id="dTime">7:30 PM</span></p>
+    <p class="dateline"><span id="dWeek">Thursday</span><span id="dDate">10 December 2026</span><span id="dTime">7:00 PM</span></p>
     <p class="quote">A special moment, a beautiful beginning, and the people we love most by our side.</p>
   </section>
 
@@ -175,15 +175,6 @@ footer .script{font-size:38px;color:var(--green);display:block}
           <div class="grid7" id="cal"></div>
           <a class="btn" id="gcal" href="#">Add to Google Calendar</a>
         </div>
-        <div class="card plan">
-          <h3>The evening</h3>
-          <ol>
-            <li><time>7:30 PM</time><p>Guests arrive<small>Welcome drinks in the garden</small></p></li>
-            <li><time>8:30 PM</time><p>Zaffa and grand entrance<small>Please be seated by 8:15</small></p></li>
-            <li><time>9:30 PM</time><p>Dinner<small>Served at your tables</small></p></li>
-            <li><time>10:30 PM</time><p>Cake and first dance<small>Then the dance floor is yours</small></p></li>
-          </ol>
-        </div>
       </div>
     </div>
   </section>
@@ -208,15 +199,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
       <div class="card">
         <form id="wish" novalidate>
           <label>Your name<input type="text" id="wName" autocomplete="name" placeholder="e.g. Sara Ahmed"></label>
-          <fieldset class="choices">
-            <legend>Will you join us?</legend>
-            <label class="choice"><input type="radio" name="att" value="yes" checked><span>Joyfully attending</span></label>
-            <label class="choice"><input type="radio" name="att" value="no"><span>Sadly can’t make it</span></label>
-          </fieldset>
-          <div class="row2">
-            <label>Your wishes for the couple<textarea id="wMsg" placeholder="Write a few words…"></textarea></label>
-            <label>Guests (incl. you)<input type="number" id="wN" min="1" max="10" value="1" inputmode="numeric"></label>
-          </div>
+          <label>Your wishes for the couple<textarea id="wMsg" placeholder="Write a few words…"></textarea></label>
           <p class="err" id="err" aria-live="polite"></p>
           <button class="btn" type="submit">Send wishes</button>
         </form>
@@ -246,7 +229,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
 const C = {
   groom: "Ahmed",
   bride: "Mona",
-  date: "2026-12-10T19:30:00+02:00",   // date, time and Cairo offset
+  date: "2026-12-10T19:00:00+02:00",   // date, time and Cairo offset
   hours: 4,                             // event length, for the calendar
   venue: "Paradise Inn Resort",
   address: "El Maamoura, Alexandria",
@@ -341,13 +324,10 @@ let msg = "";
 $("wish").addEventListener("submit", e => {
   e.preventDefault();
   const name = $("wName").value.trim(), text = $("wMsg").value.trim();
-  const att = document.querySelector('input[name="att"]:checked').value;
-  const n = Math.max(1, Math.min(10, parseInt($("wN").value, 10) || 1));
   if (!name){ $("err").textContent = "Please add your name."; $("wName").focus(); return; }
+  if (!text){ $("err").textContent = "Please write a few words for the couple."; $("wMsg").focus(); return; }
   $("err").textContent = "";
-  msg = "Dear " + C.groom + " & " + C.bride + ",\n" +
-    (att === "yes" ? "I’ll be there! Guests: " + n + "." : "Sadly I can’t make it, but I’m with you in spirit.") +
-    (text ? "\n\n" + text : "") + "\n\n— " + name;
+  msg = "Dear " + C.groom + " & " + C.bride + ",\n\n" + text + "\n\n— " + name;
   $("outText").textContent = msg;
   const wa = $("wa");
   if (C.whatsapp){ wa.style.display = ""; wa.href = "https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(msg); wa.target = "_blank"; wa.rel = "noopener"; $("outNote").textContent = "Your message is ready — send it to the couple:"; }
