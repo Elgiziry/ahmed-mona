@@ -262,7 +262,7 @@ const C = {
   area: "El Maamoura",                  // short line on the card
   address: "El Maamoura, Alexandria",
   maps: "https://www.google.com/maps/place/Paradise+Inn+Beach+Resort+Maamoura/@31.2889188,30.025028,17z/data=!4m6!3m5!1s0x14f5d0ef46c9d3f1:0x62f6af52cbe6efbd!8m2!3d31.2889188!4d30.025028!16s%2Fg%2F1tpx22nh",   // Google Maps place link
-  wishesTo: "monaelgziry2@gmail.com"    // every wish is emailed here as a table (via formsubmit.co)
+  wishesTo: "monaelgziry2@gmail.com"    // every wish is emailed here (via formsubmit.co)
 };
 const TZ = "Africa/Cairo";
 const $ = id => document.getElementById(id);
@@ -355,7 +355,7 @@ $("wish").addEventListener("submit", e => {
       "Name": name,
       "Wish": text,
       _subject: "New wish for " + C.groom + " & " + C.bride + " from " + name,
-      _template: "table",
+      _template: "box",
       _captcha: "false",
       _honey: $("wHp").value
     })
