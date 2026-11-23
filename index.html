@@ -27,6 +27,7 @@
   --line:rgba(194,154,91,.6)}
 :root[data-theme=light],:root[data-theme=dark]{color-scheme:light}
 *{box-sizing:border-box;min-width:0}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;background:#f3e7e1}
 body{margin:0;color:var(--ink);font:18px/1.55 "Cormorant Garamond",Georgia,serif;overflow-x:clip}
 body.locked{overflow:hidden;height:100vh}
@@ -226,17 +227,17 @@ footer .script{font-style:normal;font-size:46px;display:block}
       <form id="wish" novalidate>
         <label>Your name<input type="text" id="wName" autocomplete="name" placeholder="e.g. Sara Ahmed"></label>
         <label>Your wishes for the couple<textarea id="wMsg" placeholder="Write a few words…"></textarea></label>
+        <input type="text" id="wHp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
         <p class="err" id="err" aria-live="polite"></p>
-        <button class="btn" type="submit">Send wishes</button>
+        <button class="btn" type="submit" id="wSend">Send wishes</button>
       </form>
       <div class="out" id="out" aria-live="polite">
         <p class="script" style="font-size:38px;margin:0">Thank you!</p>
-        <p style="margin:4px 0 0;color:var(--soft)" id="outNote">Your message is ready — send it to the couple:</p>
-        <pre id="outText"></pre>
+        <p style="margin:4px 0 0;color:var(--soft)" id="outNote">Your wishes were sent to the couple ♡</p>
+        <pre id="outText" hidden></pre>
         <div class="acts">
-          <a class="btn" id="wa" href="#">Send on WhatsApp</a>
-          <button class="btn ghost" type="button" id="copy">Copy message</button>
-          <button class="btn ghost" type="button" id="again">Edit</button>
+          <button class="btn ghost" type="button" id="copy" hidden>Copy message</button>
+          <button class="btn ghost" type="button" id="again">Send another wish</button>
         </div>
       </div>
     </div>
@@ -262,7 +263,7 @@ const C = {
   area: "El Maamoura",                  // short line on the card
   address: "El Maamoura, Alexandria",
   maps: "https://www.google.com/maps/place/Paradise+Inn+Beach+Resort+Maamoura/@31.2889188,30.025028,17z/data=!4m6!3m5!1s0x14f5d0ef46c9d3f1:0x62f6af52cbe6efbd!8m2!3d31.2889188!4d30.025028!16s%2Fg%2F1tpx22nh",   // Google Maps place link
-  whatsapp: ""                          // e.g. "201001234567" (no + or spaces); empty = copy only
+  wishesTo: "monaelgziry2@gmail.com"    // every wish is emailed here as a table (via formsubmit.co)
 };
 const TZ = "Africa/Cairo";
 const $ = id => document.getElementById(id);
@@ -342,18 +343,33 @@ $("wish").addEventListener("submit", e => {
   if (!text){ $("err").textContent = "Please write a few words for the couple."; $("wMsg").focus(); return; }
   $("err").textContent = "";
   msg = "Dear " + C.groom + " & " + C.bride + ",\n\n" + text + "\n\n— " + name;
-  $("outText").textContent = msg;
-  const wa = $("wa");
-  if (C.whatsapp){ wa.style.display = ""; wa.href = "https://wa.me/" + C.whatsapp + "?text=" + encodeURIComponent(msg); wa.target = "_blank"; wa.rel = "noopener"; $("outNote").textContent = "Your message is ready — send it to the couple:"; }
-  else { wa.style.display = "none"; $("outNote").textContent = "Your message is ready — copy it and send it to the couple:"; }
-  $("wish").style.display = "none"; $("out").classList.add("show");
+  const btn = $("wSend"); btn.disabled = true; btn.textContent = "Sending…";
+  const showOut = ok => {
+    $("outNote").textContent = ok ? "Your wishes were sent to the couple ♡" : "We couldn’t send it right now — please copy your message and send it to the couple:";
+    $("outText").textContent = msg; $("outText").hidden = ok; $("copy").hidden = ok;
+    $("wish").style.display = "none"; $("out").classList.add("show");
+  };
+  fetch("https://formsubmit.co/ajax/" + C.wishesTo, {
+    method: "POST",
+    headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    body: JSON.stringify({
+      "Name": name,
+      "Wish": text,
+      _subject: "New wish for " + C.groom + " & " + C.bride + " from " + name,
+      _template: "table",
+      _captcha: "false",
+      _honey: $("wHp").value
+    })
+  }).then(r => r.json()).then(d => showOut(String(d.success) === "true"))
+    .catch(() => showOut(false))
+    .finally(() => { btn.disabled = false; btn.textContent = "Send wishes"; });
 });
 $("copy").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText(msg); $("copy").textContent = "Copied ✓"; }
   catch (_) { $("copy").textContent = "Select the text above to copy"; }
   setTimeout(() => { $("copy").textContent = "Copy message"; }, 2200);
 });
-$("again").addEventListener("click", () => { $("out").classList.remove("show"); $("wish").style.display = ""; });
+$("again").addEventListener("click", () => { $("out").classList.remove("show"); $("wish").style.display = ""; $("wMsg").value = ""; });
 }
 </script>
 </body>
