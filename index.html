@@ -117,6 +117,10 @@ textarea{min-height:110px;resize:vertical}
 .out pre{white-space:pre-wrap;text-align:start;background:var(--bg);border:1px dashed var(--line);border-radius:12px;padding:14px;font:16px/1.5 "Cormorant Garamond",serif;margin:12px 0 16px}
 .out .acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .err{color:#b2412e;font-size:15px;min-height:1em;margin:0}
+.music{position:fixed;right:16px;bottom:16px;z-index:40;width:50px;height:50px;border-radius:50%;border:0;background:var(--green);color:var(--bg);font-size:24px;line-height:1;cursor:pointer;box-shadow:0 8px 20px -6px rgba(0,0,0,.45);display:grid;place-items:center}
+.music[hidden]{display:none}
+.music.off{opacity:.65}.music.off::after{content:"";position:absolute;width:26px;height:2px;background:currentColor;transform:rotate(-45deg)}
+.music:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 footer{text-align:center;padding:30px 16px 54px;color:var(--soft)}
 footer .script{font-size:38px;color:var(--green);display:block}
 @media(max-width:600px){.row2{grid-template-columns:1fr}.dateline span+span::before{margin-right:12px}.dateline{gap:4px 12px}}
@@ -222,6 +226,8 @@ footer .script{font-size:38px;color:var(--green);display:block}
     with love ♡
   </footer>
 </main>
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+<button class="music" id="music" type="button" aria-label="Pause music" hidden>♫</button>
 
 <script>
 {
@@ -251,8 +257,14 @@ $("dTime").textContent = new Intl.DateTimeFormat("en-US",{timeZone:TZ,hour:"nume
 
 /* Envelope */
 const cover = $("cover");
+const bgm = $("bgm"), mBtn = $("music");
+const setM = on => { mBtn.classList.toggle("off", !on); mBtn.setAttribute("aria-label", on ? "Pause music" : "Play music"); };
+mBtn.addEventListener("click", () => { if (bgm.paused){ bgm.play().then(() => setM(true)).catch(() => {}); } else { bgm.pause(); setM(false); } });
 $("openBtn").addEventListener("click", () => {
   cover.classList.add("open");
+  mBtn.hidden = false;
+  bgm.volume = .6;
+  bgm.play().then(() => setM(true)).catch(() => setM(false));
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   setTimeout(() => { cover.classList.add("gone"); document.body.classList.remove("locked"); }, reduce ? 50 : 1700);
 });
