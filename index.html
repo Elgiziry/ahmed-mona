@@ -47,10 +47,10 @@ h2{font:500 clamp(32px,6vw,44px)/1.05 "Cormorant Garamond",serif;margin:0 0 6px;
 .env{position:relative;width:min(84vw,420px);aspect-ratio:10/7;border:0;padding:0;background:none;cursor:pointer;perspective:1400px}
 .env span{position:absolute;display:block}
 .env .back{inset:0;background:#e8dcc2;border-radius:8px;box-shadow:0 34px 60px -18px rgba(0,0,0,.55)}
-.env .letter{left:7%;right:7%;top:7%;height:86%;background:#fffdf6;border-radius:5px;z-index:1;display:grid;place-items:center;color:#3f5f43;font:400 clamp(28px,7vw,40px) "Pinyon Script",cursive;transition:transform .9s cubic-bezier(.2,.7,.2,1) .45s}
+.env .letter{left:7%;right:7%;top:7%;height:86%;background:#fffdf6;border-radius:5px;z-index:1;display:grid;place-items:center;color:#3f5f43;font:400 clamp(40px,11vw,60px) "Pinyon Script",cursive;transition:transform .9s cubic-bezier(.2,.7,.2,1) .45s}
 .env .front{inset:0;z-index:2;border-radius:8px;background:linear-gradient(170deg,#f3ead6,#e4d6b8);clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
 .env .flap{left:0;right:0;top:0;height:60%;z-index:3;background:linear-gradient(#ece1c8,#dccdab);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s ease,z-index 0s .3s;border-radius:8px 8px 0 0}
-.env .seal{left:50%;top:56%;width:74px;height:74px;margin:-37px 0 0 -37px;z-index:4;border-radius:50%;background:radial-gradient(circle at 34% 30%,#e2c27b,#b08a3e 55%,#8a6a2b);box-shadow:0 4px 10px rgba(0,0,0,.35),inset 0 0 0 5px rgba(255,255,255,.12);display:grid;place-items:center;color:#fff8e6;font:400 24px "Pinyon Script",cursive;transition:transform .4s,opacity .4s}
+.env .seal{left:50%;top:56%;width:96px;height:96px;margin:-48px 0 0 -48px;z-index:4;border-radius:50%;background:radial-gradient(circle at 34% 30%,#e2c27b,#b08a3e 55%,#8a6a2b);box-shadow:0 4px 10px rgba(0,0,0,.35),inset 0 0 0 5px rgba(255,255,255,.12);display:grid;place-items:center;color:#fff8e6;font:400 36px "Pinyon Script",cursive;white-space:nowrap;transition:transform .4s,opacity .4s}
 .cover.open .flap{transform:rotateX(180deg);z-index:0}
 .cover.open .seal{transform:scale(.4);opacity:0}
 .cover.open .letter{transform:translateY(-58%)}
@@ -147,7 +147,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
         <p class="post">invite you to celebrate their wedding</p>
       </div>
     </div>
-    <p class="dateline"><span id="dWeek">Thursday</span><span id="dDate">15 April 2027</span><span id="dTime">7:30 PM</span></p>
+    <p class="dateline"><span id="dWeek">Thursday</span><span id="dDate">10 December 2026</span><span id="dTime">7:30 PM</span></p>
     <p class="quote">A special moment, a beautiful beginning, and the people we love most by our side.</p>
   </section>
 
@@ -171,7 +171,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
       <p class="sub">The reception will take place in the evening</p>
       <div class="when">
         <div class="card cal">
-          <h3 id="calTitle">April 2027</h3>
+          <h3 id="calTitle">December 2026</h3>
           <div class="grid7" id="cal"></div>
           <a class="btn" id="gcal" href="#">Add to Google Calendar</a>
         </div>
@@ -185,7 +185,6 @@ footer .script{font-size:38px;color:var(--green);display:block}
           </ol>
         </div>
       </div>
-      <p class="note">Date, venue and schedule are sample content — replace them with your own.</p>
     </div>
   </section>
 
@@ -195,8 +194,8 @@ footer .script{font-size:38px;color:var(--green);display:block}
       <p class="sub">We can’t wait to see you there</p>
       <div class="map"><svg id="map" viewBox="0 0 640 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
       <div class="place">
-        <h3 data-k="venue">Le Jardin Hall</h3>
-        <p data-k="address">Fifth Settlement, New Cairo</p>
+        <h3 data-k="venue">Paradise Inn Resort</h3>
+        <p data-k="address">El Maamoura, Alexandria</p>
         <a class="btn ghost" id="maps" href="#">Open in Google Maps ↗</a>
       </div>
     </div>
@@ -247,10 +246,11 @@ footer .script{font-size:38px;color:var(--green);display:block}
 const C = {
   groom: "Ahmed",
   bride: "Mona",
-  date: "2027-04-15T19:30:00+02:00",   // date, time and Cairo offset
+  date: "2026-12-10T19:30:00+02:00",   // date, time and Cairo offset
   hours: 4,                             // event length, for the calendar
-  venue: "Le Jardin Hall",
-  address: "Fifth Settlement, New Cairo",
+  venue: "Paradise Inn Resort",
+  address: "El Maamoura, Alexandria",
+  maps: "https://share.google/HTFd7BD0YJKcxVgC5",   // exact location link
   whatsapp: ""                          // e.g. "201001234567" (no + or spaces); empty = copy only
 };
 const TZ = "Africa/Cairo";
@@ -324,7 +324,7 @@ $("gcal").href = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
 $("gcal").target = "_blank"; $("gcal").rel = "noopener";
 
 /* Map illustration */
-$("maps").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(C.venue + ", " + C.address);
+$("maps").href = C.maps || "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(C.venue + ", " + C.address);
 $("maps").target = "_blank"; $("maps").rel = "noopener";
 const trees = [[70,70],[120,300],[560,60],[600,250],[250,40],[470,320],[40,210],[380,90]].map(([x,y]) =>
   '<circle cx="' + x + '" cy="' + y + '" r="14" fill="var(--leaf2)" opacity=".55"/><circle cx="' + (x+12) + '" cy="' + (y+6) + '" r="10" fill="var(--leaf)" opacity=".5"/>').join("");
