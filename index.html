@@ -55,7 +55,8 @@ a{color:inherit}
 .cover.open .flap{transform:rotateX(180deg);z-index:0}
 .cover.open .seal{transform:scale(.4);opacity:0}
 .cover.open .letter{transform:translateY(-58%)}
-.cover .hint{color:var(--soft);margin:0;font-size:17px;font-style:italic}
+.cover .hint{color:var(--soft);margin:0;font-size:17px;font-style:italic;transition:opacity .4s}
+.cover.open .hint{opacity:0}
 
 /* Hero card */
 .hero{width:min(100%,660px);margin:0 auto;aspect-ratio:1075/1463;position:relative;container-type:inline-size;background:url(images/hero.webp) center/100% 100% no-repeat;
@@ -288,8 +289,10 @@ $("openBtn").addEventListener("click", () => {
   bgm.volume = .6;
   bgm.play().then(() => setM(true)).catch(() => setM(false));
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  setTimeout(() => { cover.classList.add("gone"); document.body.classList.remove("locked"); }, reduce ? 50 : 1700);
+  setTimeout(reveal, reduce ? 2500 : 5000);
 });
+function reveal(){ cover.classList.add("gone"); document.body.classList.remove("locked"); }
+cover.addEventListener("click", e => { if (cover.classList.contains("open") && !e.target.closest(".env")) reveal(); });
 
 /* Countdown */
 const pad = n => String(n).padStart(2, "0");
