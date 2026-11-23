@@ -132,7 +132,7 @@ footer .script{font-size:38px;color:var(--green);display:block}
     <span class="letter" data-k="initials">A &amp; M</span>
     <span class="front"></span>
     <span class="flap"></span>
-    <span class="seal" data-k="initials">A&amp;M</span>
+    <span class="seal" data-k="seal">A&amp;M</span>
   </button>
   <p class="hint">Tap the seal to open</p>
 </div>
@@ -258,7 +258,7 @@ const $ = id => document.getElementById(id);
 const when = new Date(C.date);
 
 /* Fill text */
-const fill = {groom:C.groom, bride:C.bride, venue:C.venue, address:C.address, initials:C.groom[0]+" & "+C.bride[0]};
+const fill = {groom:C.groom, bride:C.bride, venue:C.venue, address:C.address, initials:C.groom[0]+" & "+C.bride[0], seal:C.groom[0]+"&"+C.bride[0]};
 document.querySelectorAll("[data-k]").forEach(el => { el.textContent = fill[el.dataset.k]; });
 document.title = C.groom + " & " + C.bride;
 const fmt = o => new Intl.DateTimeFormat("en-GB", {timeZone:TZ, ...o}).format(when);
